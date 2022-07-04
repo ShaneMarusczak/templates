@@ -38,14 +38,14 @@ export const handler: Handlers<TemplateRes> = {
     }
 
     if(templateName === "") {
-      return ctx.render(getRes(templateName, "Please enter a template name.", false,""));
+      return ctx.render(getRes("", "Please enter a template name.", false,""));
     }
 
     const templateArgs : string[] = templateArgString.split(",").filter(Boolean);
 
     if(deletebox === "on" && templateName !== "") {
       await deleteTemplate(templateName);
-      return ctx.render(getRes(templateName, "Deleted!", false,""));
+      return ctx.render(getRes("", "Deleted!", false,""));
     }
 
     if(newbox === "on" && templateName !== "") {
@@ -57,13 +57,14 @@ export const handler: Handlers<TemplateRes> = {
     }
     
     const template = await getTemplate({name:templateName});
+    console.debug(template);
 
-    if(typeof template === "undefined") {
-      return ctx.render(getRes(templateName, "Not Found!", false,""));
+    if(typeof template === "undefined" || template === null) {
+      return ctx.render(getRes("", "Not Found!", false,""));
     }
     if(template.argCount != templateArgs.length) {
       const error = StringFormat("Expected {0} args, got {1}.", String(template.argCount), String(templateArgs.length));
-      return ctx.render(getRes(templateName, error, false, template.value));
+      return ctx.render(getRes("", error, false, template.value));
 
     }
 
