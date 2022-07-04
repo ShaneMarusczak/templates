@@ -2,9 +2,10 @@ import {
   MongoClient,
   ObjectId,
 } from "https://deno.land/x/mongo@v0.30.1/mod.ts";
+import { config } from "https://deno.land/x/dotenv@v3.2.0/mod.ts";
 
-const CONSTRING =
-  "mongodb+srv://templateuser:vrCliaIgVa9IlDOa@templatecluster.opiv0.mongodb.net/?retryWrites=true&w=majority&authMechanism=SCRAM-SHA-1";
+const CONSTRING = "mongodb+srv://templateuser:" + config().DBPWD +
+  "@templatecluster.opiv0.mongodb.net/?retryWrites=true&w=majority&authMechanism=SCRAM-SHA-1";
 
 const client = new MongoClient();
 
