@@ -2,7 +2,7 @@
 import { h } from "preact";
 import { Handlers, PageProps } from "$fresh/server.ts";
 
-import clipboard from '../utils/clipboard.ts';
+import clipboard from 'https://deno.land/x/clipboard@v0.0.2/mod.ts';
 import {StringFormat} from '../utils/string_utils.ts'
 import { getTemplate, insertTemplate, deleteTemplate } from '../utils/db.ts'
 

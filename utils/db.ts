@@ -16,7 +16,7 @@ interface TemplateSchema {
   argCount: number;
 }
 
-export async function getTemplate(schema: object) {
+export async function getTemplate(schema: Record<string, unknown>) {
   const db = client.database("Template");
 
   const templates = db.collection<TemplateSchema>("Template");
