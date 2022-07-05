@@ -2,19 +2,17 @@
 import { h } from "preact";
 import { Handlers, PageProps } from "$fresh/server.ts";
 
-import clipboard from 'https://deno.land/x/clipboard@v0.0.2/mod.ts';
 import {StringFormat} from '../utils/string_utils.ts'
 import { getTemplate, insertTemplate, deleteTemplate } from '../utils/db.ts'
 
 interface TemplateRes {
     query: string,
     value: string;
-    showClipboardMessage: boolean;
     rawTemplate:string;
 }
 
-function getRes(query:string, value:string,showClipboardMessage:boolean,rawTemplate:string):TemplateRes {
-  return {query,value,showClipboardMessage,rawTemplate};
+function getRes(query:string, value:string,rawTemplate:string):TemplateRes {
+  return {query,value,rawTemplate};
 }
 
 function getArgCount(s:string):number {
@@ -34,48 +32,48 @@ export const handler: Handlers<TemplateRes> = {
     const newtemplateBody = url.searchParams.get("newtemplateBody") || "";
 
     if(newbox === "on" && deletebox === "on") {
-      return ctx.render(getRes(templateName, "Error, choose just new or delete.", false,""));
+      return ctx.render(getRes(templateName, "Error, choose just new or delete.", ""));
     }
 
     if(templateName === "") {
-      return ctx.render(getRes("", "Please enter a template name.", false,""));
+      return ctx.render(getRes("", "Please enter a template name.", ""));
     }
 
     const templateArgs : string[] = templateArgString.split(",").filter(Boolean);
 
     if(deletebox === "on" && templateName !== "") {
       await deleteTemplate(templateName);
-      return ctx.render(getRes("", "Deleted!", false,""));
+      return ctx.render(getRes("", "Deleted!", ""));
     }
 
     if(newbox === "on" && templateName !== "") {
       if(newtemplateBody === "") {
-        return ctx.render(getRes(templateName, "No template body provided!", false,""));
+        return ctx.render(getRes(templateName, "No template body provided!", ""));
       }
       await insertTemplate(templateName, newtemplateBody, getArgCount(newtemplateBody));
-      return ctx.render(getRes(templateName, "Added!", false,""));
+      return ctx.render(getRes(templateName, "Added!",""));
     }
     
     const template = await getTemplate({name:templateName});
     console.debug(template);
 
     if(typeof template === "undefined" || template === null) {
-      return ctx.render(getRes("", "Not Found!", false,""));
+      return ctx.render(getRes("", "Not Found!", ""));
     }
     if(template.argCount != templateArgs.length) {
       const error = StringFormat("Expected {0} args, got {1}.", String(template.argCount), String(templateArgs.length));
-      return ctx.render(getRes("", error, false, template.value));
+      return ctx.render(getRes("", error, template.value));
 
     }
 
     const value = StringFormat(template.value, ...templateArgs);
-    clipboard.writeText(value);
-    return ctx.render(getRes(templateName, value, true, ""));
+
+    return ctx.render(getRes(templateName, value, ""));
   },
 };
 
 export default function Page({ data }: PageProps<TemplateRes>) {
-  const { query, value, showClipboardMessage, rawTemplate } = data;
+  const { query, value, rawTemplate } = data;
   return (
     <div>
       <form>
@@ -126,8 +124,6 @@ export default function Page({ data }: PageProps<TemplateRes>) {
       }}>
         {value}
       </p>
-
-      <p>{showClipboardMessage ? "Copied to clipboard!" : ""}</p>
       <p>{rawTemplate ? "Raw Template: "+rawTemplate: ""}</p>
 
     </div>
