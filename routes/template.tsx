@@ -5,6 +5,9 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import {StringFormat} from '../utils/string_utils.ts'
 import { getTemplate, insertTemplate, deleteTemplate } from '../utils/db.ts'
 
+import Output from "../islands/Output.tsx";
+
+
 interface TemplateRes {
     query: string,
     value: string;
@@ -113,17 +116,7 @@ export default function Page({ data }: PageProps<TemplateRes>) {
         }}>Run</button>
 
       </form>
-
-      <p 
-      style={{
-              border: "1px solid black",
-              padding: "5px",
-              width: "50em",
-              minHeight: "5em",
-              overflow: "auto"
-      }}>
-        {value}
-      </p>
+      <Output value={value}/>
       <p>{rawTemplate ? "Raw Template: "+rawTemplate: ""}</p>
 
     </div>
