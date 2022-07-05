@@ -42,7 +42,7 @@ export const handler: Handlers<TemplateRes> = {
       return ctx.render(getRes("", "Please enter a template name.", ""));
     }
 
-    const templateArgs : string[] = templateArgString.split(",").filter(Boolean);
+    const templateArgs : string[] = templateArgString.split(",").filter(Boolean).map(a => a.trim());
 
     if(deletebox === "on" && templateName !== "") {
       await deleteTemplate(templateName);
