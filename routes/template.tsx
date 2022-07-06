@@ -182,6 +182,7 @@ export default function Page({ data }: PageProps<TemplateRes>) {
         <RunButton />
       </form>
       <Output value={value} />
+      <p title="2:14 PM">Last Updated: July 6, 2022</p>
       <p>{rawTemplate ? "Raw Template: " + rawTemplate : ""}</p>
     </div>
   );
