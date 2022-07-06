@@ -1,12 +1,10 @@
 /** @jsx h */
 import { h } from "preact";
 import { Handlers, PageProps } from "$fresh/server.ts";
-
-import {StringFormat} from '../utils/string_utils.ts'
+import { StringFormat, getArgCount } from '../utils/string_utils.ts'
 import { getTemplate, insertTemplate, deleteTemplate } from '../utils/db.ts'
-
 import Output from "../islands/Output.tsx";
-
+import RunButton from "../islands/RunButton.tsx";
 
 interface TemplateRes {
     query: string,
@@ -14,25 +12,22 @@ interface TemplateRes {
     rawTemplate:string;
 }
 
+function getParam(req:Request, name:string):string {
+  return new URL(req.url).searchParams.get(name) || "";
+}
+
 function getRes(query:string, value:string,rawTemplate:string):TemplateRes {
   return {query,value,rawTemplate};
 }
 
-function getArgCount(s:string):number {
-  return (s.match(/{(\d+)}/g) || []).length;
-}
-
 export const handler: Handlers<TemplateRes> = {
   async GET(req, ctx) {
-    const url = new URL(req.url);
 
-    const templateName = url.searchParams.get("templateName") || "";
-    const templateArgString = url.searchParams.get("templateArgString") || "";
-
-
-    const newbox = url.searchParams.get("newbox") || "";
-    const deletebox = url.searchParams.get("deletebox") || "";
-    const newtemplateBody = url.searchParams.get("newtemplateBody") || "";
+    const templateName = getParam(req, "templateName");
+    const templateArgString = getParam(req, "templateArgString");
+    const newbox = getParam(req, "newbox");
+    const deletebox = getParam(req, "deletebox");
+    const newtemplateBody = getParam(req, "newtemplateBody");
 
     if(newbox === "on" && deletebox === "on") {
       return ctx.render(getRes(templateName, "Error, choose just new or delete.", ""));
@@ -65,7 +60,7 @@ export const handler: Handlers<TemplateRes> = {
     }
     if(template.argCount != templateArgs.length) {
       const error = StringFormat("Expected {0} args, got {1}.", String(template.argCount), String(templateArgs.length));
-      return ctx.render(getRes("", error, template.value));
+      return ctx.render(getRes(templateName, error, template.value));
 
     }
 
@@ -78,47 +73,73 @@ export const handler: Handlers<TemplateRes> = {
 export default function Page({ data }: PageProps<TemplateRes>) {
   const { query, value, rawTemplate } = data;
   return (
-    <div>
-      <form>
+    <div
+    style={{
+      display:"flex",
+      flexDirection:"column",
+      alignItems:"center",
+      justifyContent:"center"
+    }}>
+      <form 
+      style={{
+        marginTop:"50px",
+        display:"flex",
+        flexDirection:"column",
+        alignItems:"center",
+        justifyContent:"center"
+      }}>
 
-        <label for="templateName">Template Name:</label>
+        <label for="templateName"
+        style={{
+          display:"inline-block",
+          width:"125px"
+        }}>Template Name:</label>
         <input type="text" name="templateName" id="templateName" value={query}
         style={{
-                border: "1px solid black"
+          border: "1px solid black",
+          margin: "5px"
         }}/>
+        <div>
+          <label for="newbox">New?</label>
+          <input type="checkbox" name="newbox" id="newbox"
+          style={{
+            margin: "5px"
+          }}></input>
+          <label for="deletebox">Delete?</label>
+          <input type="checkbox" name="deletebox" id="deletebox"
+          style={{
+          margin: "5px"
+          }}/>
+        </div>
+
 
         <br/>
 
-        <label for="templateArgString">Template Args:</label>
+        <label for="templateArgString"
+        style={{
+          display:"inline-block",
+          width:"125px"
+        }}>Template Args:</label>
         <input type="text" name="templateArgString" id="templateArgString"
         style={{
-                border: "1px solid black"
+          border: "1px solid black",
+          margin: "5px"
         }}/>
+                <br/>
 
-        <br/><br/>
         <label for="newtemplateBody">New Template Body:</label>
         <textarea name="newtemplateBody" id="newtemplateBody"
         style={{
-                border: "1px solid black"
+                border: "1px solid black",
+                width:"300px",
+                height:"150px"
         }}/>
-        <label for="newbox">New?</label>
-        <input type="checkbox" name="newbox" id="newbox"></input>
 
-        <label for="deletebox">Delete?</label>
-        <input type="checkbox" name="deletebox" id="deletebox"></input>
         <br/>
-
-        <button type="submit"
-        style={{
-                width: "50px",
-                height: "50px",
-                border: "1px solid black"
-        }}>Run</button>
-
+        <RunButton/>
       </form>
       <Output value={value}/>
       <p>{rawTemplate ? "Raw Template: "+rawTemplate: ""}</p>
-
     </div>
   );
 }

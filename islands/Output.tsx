@@ -1,5 +1,6 @@
 /** @jsx h */
 import { h } from "preact";
+import { tw } from "../utils/twind.ts";
 
 export default function Output(props: { value: string }) {
   const {value} = props;

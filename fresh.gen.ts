@@ -4,6 +4,7 @@
 
 import * as $0 from "./routes/template.tsx";
 import * as $$0 from "./islands/Output.tsx";
+import * as $$1 from "./islands/RunButton.tsx";
 
 const manifest = {
   routes: {
@@ -11,6 +12,7 @@ const manifest = {
   },
   islands: {
     "./islands/Output.tsx": $$0,
+    "./islands/RunButton.tsx": $$1,
   },
   baseUrl: import.meta.url,
 };
