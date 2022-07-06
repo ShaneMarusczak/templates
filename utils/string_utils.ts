@@ -3,5 +3,14 @@ export function StringFormat(str: string, ...args: string[]) {
 }
 
 export function getArgCount(s: string): number {
-  return (s.match(/{(\d+)}/g) || []).length;
+  const matches = s.match(/{(\d+)}/g) || [];
+  let max = -Infinity;
+  for (const m in matches) {
+    const num = Number(m);
+    if (max < num) {
+      max = num;
+    }
+  }
+
+  return max;
 }

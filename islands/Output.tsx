@@ -3,13 +3,13 @@ import { h } from "preact";
 import { tw } from "../utils/twind.ts";
 
 export default function Output(props: { value: string }) {
-  const {value} = props;
+  const { value } = props;
 
-  function sleep(ms:number) {
+  function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  function modal(message:string, duration:number) {
+  function modal(message: string, duration: number) {
     const modalBox = document.createElement("div");
     modalBox.id = "modal-box";
     const innerModalBox = document.createElement("div");
@@ -25,19 +25,22 @@ export default function Output(props: { value: string }) {
 
   function onClick() {
     modal("Copied to clipboard!", 2000);
-    navigator.clipboard.writeText(value)
+    navigator.clipboard.writeText(value);
   }
 
   return (
-    <p 
-    style={{
+    <p
+      style={{
         border: "1px solid black",
         padding: "5px",
         width: "50em",
         minHeight: "5em",
         overflow: "auto",
-        whiteSpace: "pre"
-        }} 
-    onClick={()=>onClick()}>{value}</p>
+        whiteSpace: "pre",
+      }}
+      onClick={() => onClick()}
+    >
+      {value}
+    </p>
   );
 }
