@@ -12,5 +12,5 @@ export function getArgCount(s: string): number {
     }
   }
 
-  return max;
+  return max + 1;
 }
