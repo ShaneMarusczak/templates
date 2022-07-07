@@ -109,7 +109,7 @@ export default function Page({ data }: PageProps<UIState>) {
         <RunButton />
       </form>
       <Output value={value} copyable={copyable} />
-      <p title="1:04 PM">Last Updated: July 7, 2022</p>
+      <p title="1:29 PM">Last Updated: July 7, 2022</p>
       <pre style={{ width: "50em", whiteSpace: "pre-wrap" }}>
         {rawTemplate ? "Raw Template:\n" + rawTemplate : ""}
       </pre>

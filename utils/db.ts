@@ -16,12 +16,20 @@ interface TemplateSchema {
   argCount: number;
 }
 
-export async function getTemplate(schema: Record<string, unknown>) {
+export async function getTemplate(name: string) {
   const db = client.database("Template");
 
   const templates = db.collection<TemplateSchema>("Template");
 
-  return await templates.findOne(schema);
+  return await templates.findOne({ name });
+}
+
+export async function checkExists(name: string) {
+  const db = client.database("Template");
+
+  const templates = db.collection<TemplateSchema>("Template");
+
+  return await templates.countDocuments({ name }, { limit: 1 });
 }
 
 export async function insertTemplate(

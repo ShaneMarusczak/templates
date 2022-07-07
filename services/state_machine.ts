@@ -1,4 +1,9 @@
-import { deleteTemplate, getTemplate, insertTemplate } from "../utils/db.ts";
+import {
+  checkExists,
+  deleteTemplate,
+  getTemplate,
+  insertTemplate,
+} from "../utils/db.ts";
 import { getArgCount, stringFormat } from "../utils/string_utils.ts";
 
 export interface UIState {
@@ -37,6 +42,10 @@ export default async function getNextState(url: URL): Promise<UIState> {
     if (newtemplateBody === "") {
       return makeState(templateName, "No template body provided!", "", false);
     }
+    if (await checkExists(templateName) === 1) {
+      return makeState(templateName, "Template already exists!", "", false);
+    }
+
     await insertTemplate(
       templateName,
       newtemplateBody,
@@ -45,7 +54,7 @@ export default async function getNextState(url: URL): Promise<UIState> {
     return makeState(templateName, "Added!", "", false);
   }
 
-  const template = await getTemplate({ name: templateName });
+  const template = await getTemplate(templateName);
 
   if (typeof template === "undefined" || template === null) {
     return makeState("", "Not Found!", "", false);
