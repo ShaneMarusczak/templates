@@ -1,9 +1,8 @@
 /** @jsx h */
 import { h } from "preact";
-import { tw } from "../utils/twind.ts";
 
-export default function Output(props: { value: string }) {
-  const { value } = props;
+export default function Output(props: { value: string; copyable: boolean }) {
+  const { value, copyable } = props;
 
   function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -11,11 +10,35 @@ export default function Output(props: { value: string }) {
 
   function modal(message: string, duration: number) {
     const modalBox = document.createElement("div");
-    modalBox.id = "modal-box";
+
+    modalBox.style.zIndex = "1";
+    modalBox.style.position = "fixed";
+    modalBox.style.padding = "0";
+    modalBox.style.margin = "0";
+    modalBox.style.top = "0";
+    modalBox.style.left = "0";
+    modalBox.style.width = "100%";
+    modalBox.style.height = "100%";
+    modalBox.style.backgroundColor = "rgba(0, 0, 0, 0.6)";
+
     const innerModalBox = document.createElement("div");
-    innerModalBox.id = "inner-modal-box";
+
+    innerModalBox.style.position = "relative";
+    innerModalBox.style.textAlign = "center";
+    innerModalBox.style.borderRadius = "5px";
+    innerModalBox.style.boxShadow = "inset 0 0 0 4px black";
+    innerModalBox.style.marginLeft = "35vw";
+    innerModalBox.style.marginTop = "10vh";
+    innerModalBox.style.backgroundColor = "azure";
+    innerModalBox.style.width = "30vw";
+    innerModalBox.style.height = "15vh";
+
     const modalMessage = document.createElement("span");
-    modalMessage.id = "modal-message";
+
+    modalMessage.style.verticalAlign = "middle";
+    modalMessage.style.fontSize = "xx-large";
+    modalMessage.style.lineHeight = "15vh";
+
     innerModalBox.appendChild(modalMessage);
     modalBox.appendChild(innerModalBox);
     modalMessage.innerText = message;
@@ -24,8 +47,10 @@ export default function Output(props: { value: string }) {
   }
 
   function onClick() {
-    modal("Copied to clipboard!", 2000);
-    navigator.clipboard.writeText(value);
+    if (copyable) {
+      modal("Copied to clipboard!", 1300);
+      navigator.clipboard.writeText(value);
+    }
   }
 
   return (

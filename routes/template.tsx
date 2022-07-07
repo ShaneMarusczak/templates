@@ -108,9 +108,11 @@ export default function Page({ data }: PageProps<UIState>) {
         <br />
         <RunButton />
       </form>
-      <Output value={value} />
-      <p title="11:24 AM">Last Updated: July 7, 2022</p>
-      <pre>{rawTemplate ? "Raw Template: " + rawTemplate : ""}</pre>
+      <Output value={value} copyable={!rawTemplate} />
+      <p title="1:04 PM">Last Updated: July 7, 2022</p>
+      <pre style={{ width: "50em", whiteSpace: "pre-wrap" }}>
+        {rawTemplate ? "Raw Template:\n" + rawTemplate : ""}
+      </pre>
     </div>
   );
 }
