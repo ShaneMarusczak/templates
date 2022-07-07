@@ -109,8 +109,8 @@ export default function Page({ data }: PageProps<UIState>) {
         <RunButton />
       </form>
       <Output value={value} />
-      <p title="9:56 PM">Last Updated: July 6, 2022</p>
-      <p>{rawTemplate ? "Raw Template: " + rawTemplate : ""}</p>
+      <p title="11:24 AM">Last Updated: July 7, 2022</p>
+      <pre>{rawTemplate ? "Raw Template: " + rawTemplate : ""}</pre>
     </div>
   );
 }
