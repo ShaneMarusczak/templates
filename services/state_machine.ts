@@ -5,6 +5,7 @@ export interface UIState {
   query: string;
   value: string;
   rawTemplate: string;
+  copyable: boolean;
 }
 
 export default async function getNextState(url: URL): Promise<UIState> {
@@ -15,34 +16,39 @@ export default async function getNextState(url: URL): Promise<UIState> {
   const newtemplateBody = getParam(url, "newtemplateBody");
 
   if (newbox === "on" && deletebox === "on") {
-    return makeState(templateName, "Error, choose just new or delete.", "");
+    return makeState(
+      templateName,
+      "Error, choose just new or delete.",
+      "",
+      false,
+    );
   }
 
   if (templateName === "") {
-    return makeState("", "Please enter a template name.", "");
+    return makeState("", "Please enter a template name.", "", false);
   }
 
   if (deletebox === "on" && templateName !== "") {
     await deleteTemplate(templateName);
-    return makeState("", "Deleted!", "");
+    return makeState("", "Deleted!", "", false);
   }
 
   if (newbox === "on" && templateName !== "") {
     if (newtemplateBody === "") {
-      return makeState(templateName, "No template body provided!", "");
+      return makeState(templateName, "No template body provided!", "", false);
     }
     await insertTemplate(
       templateName,
       newtemplateBody,
       getArgCount(newtemplateBody),
     );
-    return makeState(templateName, "Added!", "");
+    return makeState(templateName, "Added!", "", false);
   }
 
   const template = await getTemplate({ name: templateName });
 
   if (typeof template === "undefined" || template === null) {
-    return makeState("", "Not Found!", "");
+    return makeState("", "Not Found!", "", false);
   }
 
   const templateArgs: string[] = templateArgString.split(",").filter(Boolean)
@@ -54,12 +60,12 @@ export default async function getNextState(url: URL): Promise<UIState> {
       String(template.argCount),
       String(templateArgs.length),
     );
-    return makeState(templateName, error, template.value);
+    return makeState(templateName, error, template.value, false);
   }
 
   const value = stringFormat(template.value, ...templateArgs);
 
-  return makeState(templateName, value, "");
+  return makeState(templateName, value, "", true);
 }
 
 function getParam(url: URL, name: string): string {
@@ -70,6 +76,7 @@ function makeState(
   query: string,
   value: string,
   rawTemplate: string,
+  copyable: boolean,
 ): UIState {
-  return { query, value, rawTemplate };
+  return { query, value, rawTemplate, copyable };
 }

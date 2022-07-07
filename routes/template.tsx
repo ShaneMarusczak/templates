@@ -12,7 +12,7 @@ export const handler: Handlers<UIState> = {
 };
 
 export default function Page({ data }: PageProps<UIState>) {
-  const { query, value, rawTemplate } = data;
+  const { query, value, rawTemplate, copyable } = data;
   return (
     <div
       style={{
@@ -108,7 +108,7 @@ export default function Page({ data }: PageProps<UIState>) {
         <br />
         <RunButton />
       </form>
-      <Output value={value} copyable={!rawTemplate} />
+      <Output value={value} copyable={copyable} />
       <p title="1:04 PM">Last Updated: July 7, 2022</p>
       <pre style={{ width: "50em", whiteSpace: "pre-wrap" }}>
         {rawTemplate ? "Raw Template:\n" + rawTemplate : ""}
