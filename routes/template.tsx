@@ -1,92 +1,17 @@
 /** @jsx h */
 import { h } from "preact";
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { getArgCount, StringFormat } from "../utils/string_utils.ts";
-import { deleteTemplate, getTemplate, insertTemplate } from "../utils/db.ts";
 import Output from "../islands/Output.tsx";
 import RunButton from "../islands/RunButton.tsx";
+import getNextState, { UIState } from "../services/state_machine.ts";
 
-interface TemplateRes {
-  query: string;
-  value: string;
-  rawTemplate: string;
-}
-
-function getParam(url: URL, name: string): string {
-  return url.searchParams.get(name) || "";
-}
-
-function getRes(
-  query: string,
-  value: string,
-  rawTemplate: string,
-): TemplateRes {
-  return { query, value, rawTemplate };
-}
-
-export const handler: Handlers<TemplateRes> = {
+export const handler: Handlers<UIState> = {
   async GET(req, ctx) {
-    const url = new URL(req.url);
-    const templateName = getParam(url, "templateName");
-    const templateArgString = getParam(url, "templateArgString");
-    const newbox = getParam(url, "newbox");
-    const deletebox = getParam(url, "deletebox");
-    const newtemplateBody = getParam(url, "newtemplateBody");
-
-    if (newbox === "on" && deletebox === "on") {
-      return ctx.render(
-        getRes(templateName, "Error, choose just new or delete.", ""),
-      );
-    }
-
-    if (templateName === "") {
-      return ctx.render(getRes("", "Please enter a template name.", ""));
-    }
-
-    if (deletebox === "on" && templateName !== "") {
-      await deleteTemplate(templateName);
-      return ctx.render(getRes("", "Deleted!", ""));
-    }
-
-    if (newbox === "on" && templateName !== "") {
-      if (newtemplateBody === "") {
-        return ctx.render(
-          getRes(templateName, "No template body provided!", ""),
-        );
-      }
-      await insertTemplate(
-        templateName,
-        newtemplateBody,
-        getArgCount(newtemplateBody),
-      );
-      return ctx.render(getRes(templateName, "Added!", ""));
-    }
-
-    const template = await getTemplate({ name: templateName });
-
-    if (typeof template === "undefined" || template === null) {
-      return ctx.render(getRes("", "Not Found!", ""));
-    }
-
-    const templateArgs: string[] = templateArgString.split(",").filter(Boolean)
-      .map((a) => a.trim());
-
-    if (template.argCount != templateArgs.length) {
-      const error = StringFormat(
-        "Expected {0} args, got {1}.",
-        String(template.argCount),
-        String(templateArgs.length),
-      );
-      return ctx.render(getRes(templateName, error, template.value));
-    }
-
-    const value = StringFormat(template.value, ...templateArgs);
-
-    return ctx.render(getRes(templateName, value, ""));
+    return ctx.render(await getNextState(new URL(req.url)));
   },
 };
 
-export default function Page({ data }: PageProps<TemplateRes>) {
+export default function Page({ data }: PageProps<UIState>) {
   const { query, value, rawTemplate } = data;
   return (
     <div
