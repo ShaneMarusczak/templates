@@ -12,8 +12,8 @@ interface TemplateRes {
   rawTemplate: string;
 }
 
-function getParam(req: Request, name: string): string {
-  return new URL(req.url).searchParams.get(name) || "";
+function getParam(url: URL, name: string): string {
+  return url.searchParams.get(name) || "";
 }
 
 function getRes(
@@ -26,11 +26,12 @@ function getRes(
 
 export const handler: Handlers<TemplateRes> = {
   async GET(req, ctx) {
-    const templateName = getParam(req, "templateName");
-    const templateArgString = getParam(req, "templateArgString");
-    const newbox = getParam(req, "newbox");
-    const deletebox = getParam(req, "deletebox");
-    const newtemplateBody = getParam(req, "newtemplateBody");
+    const url = new URL(req.url);
+    const templateName = getParam(url, "templateName");
+    const templateArgString = getParam(url, "templateArgString");
+    const newbox = getParam(url, "newbox");
+    const deletebox = getParam(url, "deletebox");
+    const newtemplateBody = getParam(url, "newtemplateBody");
 
     if (newbox === "on" && deletebox === "on") {
       return ctx.render(
@@ -41,9 +42,6 @@ export const handler: Handlers<TemplateRes> = {
     if (templateName === "") {
       return ctx.render(getRes("", "Please enter a template name.", ""));
     }
-
-    const templateArgs: string[] = templateArgString.split(",").filter(Boolean)
-      .map((a) => a.trim());
 
     if (deletebox === "on" && templateName !== "") {
       await deleteTemplate(templateName);
@@ -69,6 +67,10 @@ export const handler: Handlers<TemplateRes> = {
     if (typeof template === "undefined" || template === null) {
       return ctx.render(getRes("", "Not Found!", ""));
     }
+
+    const templateArgs: string[] = templateArgString.split(",").filter(Boolean)
+      .map((a) => a.trim());
+
     if (template.argCount != templateArgs.length) {
       const error = StringFormat(
         "Expected {0} args, got {1}.",
