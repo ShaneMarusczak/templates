@@ -37,6 +37,8 @@ export default function Output(props: { value: string }) {
         minHeight: "5em",
         overflow: "auto",
         whiteSpace: "pre",
+        fontSize: "12px",
+        fontFamily: "Arial",
       }}
       onClick={() => onClick()}
     >
