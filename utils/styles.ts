@@ -3,10 +3,9 @@ export const styles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
-    paddingLeft: "20vw",
-    paddingRight: "20vw",
     backgroundColor: "#b0c4de",
+    width: "100vw",
+    height: "100vh",
   },
   gitHubLink: {
     position: "absolute",
@@ -14,7 +13,7 @@ export const styles = {
     left: "80vw",
   },
   form: {
-    marginTop: "30px",
+    marginTop: "25px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",

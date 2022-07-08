@@ -27,7 +27,9 @@ export default function Page({ data }: PageProps<UIState>) {
       >
         github
       </a>
-      <h1 style={{ fontSize: "xx-large" }}>template builder</h1>
+      <h1 style={{ fontSize: "xx-large", marginTop: "5px" }}>
+        template builder
+      </h1>
       <form style={styles.form}>
         <label for="templateName" style={styles.nameLabel}>
           template name:
@@ -84,7 +86,7 @@ export default function Page({ data }: PageProps<UIState>) {
         <RunButton />
       </form>
       <Output value={value} copyable={copyable} />
-      <p title="9:33 PM">last updated: july 7, 2022</p>
+      <p title="9:48 PM">last updated: july 7, 2022</p>
       <pre style={{ width: "40em", whiteSpace: "pre-wrap" }}>
         {rawTemplate ? "Raw Template:\n" + rawTemplate : ""}
       </pre>

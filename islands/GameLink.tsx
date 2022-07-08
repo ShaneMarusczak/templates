@@ -31,7 +31,7 @@ export default function GameLink() {
       style={{
         position: "absolute",
         top: "7vh",
-        left: "15vw",
+        left: "13vw",
         cursor: "pointer",
       }}
     >
