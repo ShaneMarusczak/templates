@@ -3,16 +3,20 @@
 // This file is automatically updated during development when running `dev.ts`.
 
 import * as $0 from "./routes/template.tsx";
-import * as $$0 from "./islands/Output.tsx";
-import * as $$1 from "./islands/RunButton.tsx";
+import * as $$0 from "./islands/GameLink.tsx";
+import * as $$1 from "./islands/Output.tsx";
+import * as $$2 from "./islands/RunButton.tsx";
+import * as $$3 from "./islands/TinyPepper.tsx";
 
 const manifest = {
   routes: {
     "./routes/template.tsx": $0,
   },
   islands: {
-    "./islands/Output.tsx": $$0,
-    "./islands/RunButton.tsx": $$1,
+    "./islands/GameLink.tsx": $$0,
+    "./islands/Output.tsx": $$1,
+    "./islands/RunButton.tsx": $$2,
+    "./islands/TinyPepper.tsx": $$3,
   },
   baseUrl: import.meta.url,
 };

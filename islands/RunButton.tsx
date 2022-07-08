@@ -1,9 +1,12 @@
 /** @jsx h */
 import { h } from "preact";
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 
 export default function RunButton() {
   const [hover, setHover] = useState(false);
+  useEffect(() => {
+    document.getElementsByTagName("html")[0].style.backgroundColor = "#b0c4de";
+  }, []);
   return (
     <button
       type="submit"

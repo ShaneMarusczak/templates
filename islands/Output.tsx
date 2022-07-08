@@ -64,6 +64,7 @@ export default function Output(props: { value: string; copyable: boolean }) {
         whiteSpace: "pre",
         fontSize: "12px",
         fontFamily: "Arial",
+        backgroundColor: "lightgrey",
       }}
       onClick={() => onClick()}
     >

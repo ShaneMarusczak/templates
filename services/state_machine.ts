@@ -23,27 +23,27 @@ export default async function getNextState(url: URL): Promise<UIState> {
   if (newbox === "on" && deletebox === "on") {
     return makeState(
       templateName,
-      "Error, choose just new or delete.",
+      "error, choose just new or delete",
       "",
       false,
     );
   }
 
   if (templateName === "") {
-    return makeState("", "Please enter a template name.", "", false);
+    return makeState("", "please enter a template name", "", false);
   }
 
   if (deletebox === "on" && templateName !== "") {
     await deleteTemplate(templateName);
-    return makeState("", "Deleted!", "", false);
+    return makeState("", "deleted!", "", false);
   }
 
   if (newbox === "on" && templateName !== "") {
     if (newtemplateBody === "") {
-      return makeState(templateName, "No template body provided!", "", false);
+      return makeState(templateName, "no template body provided", "", false);
     }
     if (await checkExists(templateName) === 1) {
-      return makeState(templateName, "Template already exists!", "", false);
+      return makeState(templateName, "template already exists", "", false);
     }
 
     await insertTemplate(
@@ -51,13 +51,13 @@ export default async function getNextState(url: URL): Promise<UIState> {
       newtemplateBody,
       getArgCount(newtemplateBody),
     );
-    return makeState(templateName, "Added!", "", false);
+    return makeState(templateName, "added!", "", false);
   }
 
   const template = await getTemplate(templateName);
 
   if (typeof template === "undefined" || template === null) {
-    return makeState("", "Not Found!", "", false);
+    return makeState("", "not Found!", "", false);
   }
 
   const templateArgs: string[] = templateArgString.split(",").filter(Boolean)
@@ -65,7 +65,7 @@ export default async function getNextState(url: URL): Promise<UIState> {
 
   if (template.argCount != templateArgs.length) {
     const error = stringFormat(
-      "Expected {0} args, got {1}.",
+      "expected {0} args, got {1}.",
       String(template.argCount),
       String(templateArgs.length),
     );
