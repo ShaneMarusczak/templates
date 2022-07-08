@@ -59,8 +59,6 @@ export default function Page({ data }: PageProps<UIState>) {
           />
         </div>
 
-        <br />
-
         <label
           for="templateArgString"
           style={styles.templateArgString}
@@ -73,7 +71,6 @@ export default function Page({ data }: PageProps<UIState>) {
           id="templateArgString"
           style={styles.templateArgStringInput}
         />
-        <br />
 
         <label for="newtemplateBody">new template body:</label>
         <textarea
@@ -82,7 +79,6 @@ export default function Page({ data }: PageProps<UIState>) {
           style={styles.newTemplateBodyInput}
         />
 
-        <br />
         <RunButton />
       </form>
       <Output value={value} copyable={copyable} />

@@ -57,7 +57,7 @@ export default async function getNextState(url: URL): Promise<UIState> {
   const template = await getTemplate(templateName);
 
   if (typeof template === "undefined" || template === null) {
-    return makeState("", "not Found!", "", false);
+    return makeState("", "not found!", "", false);
   }
 
   const templateArgs: string[] = templateArgString.split(",").filter(Boolean)
@@ -65,7 +65,7 @@ export default async function getNextState(url: URL): Promise<UIState> {
 
   if (template.argCount != templateArgs.length) {
     const error = stringFormat(
-      "expected {0} args, got {1}.",
+      "expected {0} args, got {1}",
       String(template.argCount),
       String(templateArgs.length),
     );

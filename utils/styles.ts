@@ -27,20 +27,26 @@ export const styles = {
     border: "1px solid black",
     margin: "5px",
     backgroundColor: "lightgrey",
+    borderRadius: "5px",
   },
   templateArgString: {
     display: "inline-block",
     width: "125px",
+    marginTop: "20px",
   },
   templateArgStringInput: {
     border: "1px solid black",
     margin: "5px",
     backgroundColor: "lightgrey",
+    borderRadius: "5px",
+    width: "275px",
+    marginBottom: "20px",
   },
   newTemplateBodyInput: {
     border: "1px solid black",
     width: "300px",
     height: "150px",
     backgroundColor: "lightgrey",
+    borderRadius: "5px",
   },
 };

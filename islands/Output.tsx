@@ -58,13 +58,13 @@ export default function Output(props: { value: string; copyable: boolean }) {
       style={{
         border: "1px solid black",
         padding: "5px",
-        width: "50em",
+        width: "40em",
         minHeight: "5em",
         overflow: "auto",
         whiteSpace: "pre",
-        fontSize: "12px",
-        fontFamily: "Arial",
+        // fontSize: "12px",
         backgroundColor: "lightgrey",
+        borderRadius: "5px",
       }}
       onClick={() => onClick()}
     >

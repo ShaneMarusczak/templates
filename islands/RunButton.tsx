@@ -8,11 +8,13 @@ export default function RunButton() {
     <button
       type="submit"
       style={{
-        width: "50px",
-        height: "50px",
+        width: "75px",
+        height: "45px",
         border: "1px solid black",
-        margin: "5px",
+        marginTop: "15px",
+        marginBottom: "15px",
         backgroundColor: hover ? "grey" : "darkgrey",
+        borderRadius: "5px",
       }}
       onMouseOver={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
