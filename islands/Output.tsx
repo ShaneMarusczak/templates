@@ -48,13 +48,30 @@ export default function Output(props: { value: string; copyable: boolean }) {
 
   function onClick() {
     if (copyable) {
+      let text = "";
+      const nodes = Array.from(
+        document.getElementById("highShell")?.childNodes || [],
+      );
+      const selection = window.getSelection();
+      if (selection !== null) {
+        const range = document.createRange();
+        for (const node of nodes) {
+          range.selectNodeContents(node);
+          selection.removeAllRanges();
+          selection.addRange(range);
+          text += selection.toString();
+        }
+      }
+      console.log(text);
+      navigator.clipboard.writeText(text);
+
       modal("Copied to clipboard!", 1300);
-      navigator.clipboard.writeText(value);
     }
   }
 
   return (
-    <p
+    <div
+      id="highShell"
       style={{
         border: "1px solid black",
         padding: "5px",
@@ -62,13 +79,12 @@ export default function Output(props: { value: string; copyable: boolean }) {
         minHeight: "5em",
         overflow: "auto",
         whiteSpace: "pre",
-        // fontSize: "12px",
         backgroundColor: "lightgrey",
         borderRadius: "5px",
       }}
-      onClick={() => onClick()}
+      // onClick={() => onClick()}
+      dangerouslySetInnerHTML={{ __html: value }}
     >
-      {value}
-    </p>
+    </div>
   );
 }
