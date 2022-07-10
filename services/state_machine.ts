@@ -11,6 +11,7 @@ export interface UIState {
   value: string;
   rawTemplate: string;
   copyable: boolean;
+  currentCode: string;
 }
 
 export default async function getNextState(url: URL): Promise<UIState> {
@@ -19,6 +20,11 @@ export default async function getNextState(url: URL): Promise<UIState> {
   const newbox = getParam(url, "newbox");
   const deletebox = getParam(url, "deletebox");
   const newtemplateBody = getParam(url, "newtemplateBody");
+  const secretCode = getParam(url, "secretCode");
+
+  if (secretCode !== Deno.env.get("SECRET_CODE")) {
+    return makeState("", "forbidden", "", false, "");
+  }
 
   if (newbox === "on" && deletebox === "on") {
     return makeState(
@@ -26,24 +32,37 @@ export default async function getNextState(url: URL): Promise<UIState> {
       "error, choose just new or delete",
       "",
       false,
+      secretCode,
     );
   }
 
   if (templateName === "") {
-    return makeState("", "please enter a template name", "", false);
+    return makeState("", "please enter a template name", "", false, secretCode);
   }
 
   if (deletebox === "on" && templateName !== "") {
     await deleteTemplate(templateName);
-    return makeState("", "deleted!", "", false);
+    return makeState("", "deleted!", "", false, secretCode);
   }
 
   if (newbox === "on" && templateName !== "") {
     if (newtemplateBody === "") {
-      return makeState(templateName, "no template body provided", "", false);
+      return makeState(
+        templateName,
+        "no template body provided",
+        "",
+        false,
+        secretCode,
+      );
     }
     if (await checkExists(templateName) === 1) {
-      return makeState(templateName, "template already exists", "", false);
+      return makeState(
+        templateName,
+        "template already exists",
+        "",
+        false,
+        secretCode,
+      );
     }
 
     await insertTemplate(
@@ -51,13 +70,13 @@ export default async function getNextState(url: URL): Promise<UIState> {
       newtemplateBody,
       getArgCount(newtemplateBody),
     );
-    return makeState(templateName, "added!", "", false);
+    return makeState(templateName, "added!", "", false, secretCode);
   }
 
   const template = await getTemplate(templateName);
 
   if (typeof template === "undefined" || template === null) {
-    return makeState("", "not found!", "", false);
+    return makeState(templateName, "not found!", "", false, secretCode);
   }
 
   const templateArgs: string[] = templateArgString.split(",").filter(Boolean)
@@ -69,12 +88,12 @@ export default async function getNextState(url: URL): Promise<UIState> {
       String(template.argCount),
       String(templateArgs.length),
     );
-    return makeState(templateName, error, template.value, false);
+    return makeState(templateName, error, template.value, false, secretCode);
   }
 
   const value = stringFormat(template.value, ...templateArgs);
 
-  return makeState(templateName, value, "", true);
+  return makeState(templateName, value, "", true, secretCode);
 }
 
 function getParam(url: URL, name: string): string {
@@ -86,6 +105,7 @@ function makeState(
   value: string,
   rawTemplate: string,
   copyable: boolean,
+  currentCode: string,
 ): UIState {
-  return { query, value, rawTemplate, copyable };
+  return { query, value, rawTemplate, copyable, currentCode };
 }
