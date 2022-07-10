@@ -5,8 +5,8 @@ export class tokenizer {
     public current: number = 0,
   ) {}
 
-  atEnd(): boolean {
-    return this.current >= this.source.length;
+  atEnd(num = 0): boolean {
+    return this.current + num >= this.source.length;
   }
 
   peek(): string {
@@ -14,6 +14,13 @@ export class tokenizer {
       return "\0";
     }
     return this.source[this.current];
+  }
+
+  peekNext(): string {
+    if (this.atEnd() || this.atEnd(1)) {
+      return "\0";
+    }
+    return this.source[this.current + 1];
   }
 
   advance(): string {
@@ -30,7 +37,10 @@ export class tokenizer {
     if (this.peek() === ":") {
       link.value = "here";
       this.advance(); //consume the second :
-      while (!this.atEnd() && this.peek() !== ":") {
+      while (!this.atEnd()) {
+        if (this.peek() === ":" && this.peekNext() !== "/") {
+          break;
+        }
         link.url += this.advance();
       }
       this.advance(); //consume the last :
@@ -39,7 +49,10 @@ export class tokenizer {
         link.value += this.advance();
       }
       this.advance(); //consume the second :
-      while (!this.atEnd() && this.peek() !== ":") {
+      while (!this.atEnd()) {
+        if (this.peek() === ":" && this.peekNext() !== "/") {
+          break;
+        }
         link.url += this.advance();
       }
       this.advance(); //consume the last :

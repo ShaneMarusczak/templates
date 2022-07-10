@@ -120,7 +120,7 @@ function makeHtml(tokens: token[]) {
         break;
       }
       case token_type.link: {
-        htmlString += '<a href="';
+        htmlString += '<a target="_blank" href="';
         htmlString += token.url;
         htmlString += '">';
         htmlString += token.value;
