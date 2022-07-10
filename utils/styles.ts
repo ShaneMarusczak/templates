@@ -29,6 +29,18 @@ export const styles = {
     backgroundColor: "lightgrey",
     borderRadius: "5px",
   },
+  codeLabel: {
+    display: "inline-block",
+    width: "95px",
+  },
+  codeInput: {
+    border: "1px solid black",
+    margin: "5px",
+    backgroundColor: "lightgrey",
+    borderRadius: "5px",
+    width: "50px",
+    textAlign: "center",
+  },
   templateArgString: {
     display: "inline-block",
     width: "125px",

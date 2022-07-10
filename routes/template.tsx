@@ -15,7 +15,7 @@ export const handler: Handlers<UIState> = {
 };
 
 export default function Page({ data }: PageProps<UIState>) {
-  const { query, value, rawTemplate, copyable } = data;
+  const { query, value, rawTemplate, copyable, currentCode } = data;
 
   return (
     <div style={styles.mainDiv}>
@@ -80,9 +80,19 @@ export default function Page({ data }: PageProps<UIState>) {
         />
 
         <RunButton />
+        <label for="secretCode" style={styles.codeLabel}>
+          secret code:
+        </label>
+        <input
+          type="text"
+          name="secretCode"
+          id="secretCode"
+          value={currentCode}
+          style={styles.codeInput}
+        />
       </form>
       <Output value={value} copyable={copyable} />
-      <p title="9:48 PM">last updated: july 7, 2022</p>
+      <p title="1:28 PM">last updated: july 10, 2022</p>
       <pre style={{ width: "40em", whiteSpace: "pre-wrap" }}>
         {rawTemplate ? "Raw Template:\n" + rawTemplate : ""}
       </pre>
