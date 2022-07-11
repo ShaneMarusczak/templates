@@ -57,6 +57,14 @@ export default function Page({ data }: PageProps<UIState>) {
             id="deletebox"
             style={{ margin: "5px" }}
           />
+
+          <label for="editbox">edit?</label>
+          <input
+            type="checkbox"
+            name="editbox"
+            id="editbox"
+            style={{ margin: "5px" }}
+          />
         </div>
 
         <label
@@ -92,7 +100,7 @@ export default function Page({ data }: PageProps<UIState>) {
         />
       </form>
       <Output value={value} copyable={copyable} />
-      <p title="1:28 PM">last updated: july 10, 2022</p>
+      <p title="6:29 PM">last updated: july 11, 2022</p>
       <pre style={{ width: "40em", whiteSpace: "pre-wrap" }}>
         {rawTemplate ? "Raw Template:\n" + rawTemplate : ""}
       </pre>

@@ -5,8 +5,8 @@ export class tokenizer {
     public current: number = 0,
   ) {}
 
-  atEnd(): boolean {
-    return this.current >= this.source.length;
+  atEnd(num = 0): boolean {
+    return this.current + num >= this.source.length;
   }
 
   peek(): string {
@@ -16,12 +16,20 @@ export class tokenizer {
     return this.source[this.current];
   }
 
+  peekNext(): string {
+    if (this.atEnd() || this.atEnd(1)) {
+      return "\0";
+    }
+    return this.source[this.current + 1];
+  }
+
   advance(): string {
     return this.source[this.current++];
   }
 
-  isAlpha(s: string): boolean {
-    return "a" <= s && "z" >= s && "A" <= s && "Z" >= s;
+  isAlpha(ch: string): boolean {
+    return ch.length === 1 &&
+      (ch >= "a" && ch <= "z" || ch >= "A" && ch <= "Z");
   }
 
   makeLinkToken() {
@@ -29,7 +37,10 @@ export class tokenizer {
     if (this.peek() === ":") {
       link.value = "here";
       this.advance(); //consume the second :
-      while (!this.atEnd() && this.peek() !== ":") {
+      while (!this.atEnd()) {
+        if (this.peek() === ":" && this.peekNext() !== "/") {
+          break;
+        }
         link.url += this.advance();
       }
       this.advance(); //consume the last :
@@ -38,7 +49,10 @@ export class tokenizer {
         link.value += this.advance();
       }
       this.advance(); //consume the second :
-      while (!this.atEnd() && this.peek() !== ":") {
+      while (!this.atEnd()) {
+        if (this.peek() === ":" && this.peekNext() !== "/") {
+          break;
+        }
         link.url += this.advance();
       }
       this.advance(); //consume the last :
@@ -47,17 +61,28 @@ export class tokenizer {
   }
 
   tokenize(): token[] {
-    let currentToken: token = { type: token_type.text, value: "", url: "" };
+    let currentText = "";
     while (!this.atEnd()) {
       const char = this.advance();
       if (char === ":" && (this.isAlpha(this.peek()) || this.peek() === ":")) {
-        this.tokens.push(currentToken);
+        this.tokens.push({
+          type: token_type.text,
+          value: currentText,
+          url: "",
+        });
         this.makeLinkToken();
-        currentToken = { type: token_type.text, value: "", url: "" };
+        currentText = "";
       } else {
-        currentToken.value += char;
+        currentText += char;
       }
     }
+    this.tokens.push({
+      type: token_type.text,
+      value: currentText,
+      url: "",
+    });
+
+    // TODO : add these to d
     return this.tokens;
   }
 }
@@ -67,7 +92,7 @@ export enum token_type {
   link,
 }
 
-interface token {
+export interface token {
   type: token_type;
   value: string;
   url: string;

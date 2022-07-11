@@ -4,7 +4,7 @@ export function stringFormat(str: string, ...args: string[]) {
 
 export function getArgCount(s: string): number {
   const matches = Array.from(s.match(/{(\d+)}/g) || []);
-  let max = -Infinity;
+  let max = -1;
   for (const m of matches) {
     const num = Number(m.charAt(1));
     if (max < num) {
