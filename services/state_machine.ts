@@ -3,6 +3,7 @@ import {
   deleteTemplate,
   getTemplate,
   insertTemplate,
+  updateTemplate,
 } from "../utils/db.ts";
 import { getArgCount, stringFormat } from "../utils/string_utils.ts";
 import { token, token_type, tokenizer } from "./tokenizer.ts";
@@ -15,22 +16,35 @@ export interface UIState {
   currentCode: string;
 }
 
+//TODO: break this into smaller functions
 export default async function getNextState(url: URL): Promise<UIState> {
-  const templateName = getParam(url, "templateName");
-  const templateArgString = getParam(url, "templateArgString");
-  const newbox = getParam(url, "newbox");
-  const deletebox = getParam(url, "deletebox");
-  const newtemplateBody = getParam(url, "newtemplateBody");
   const secretCode = getParam(url, "secretCode");
 
   if (secretCode !== Deno.env.get("SECRET_CODE")) {
     return makeState("", "forbidden", "", false, "");
   }
 
-  if (newbox === "on" && deletebox === "on") {
+  const templateName = getParam(url, "templateName");
+  const templateArgString = getParam(url, "templateArgString");
+
+  const boxes: { [key: string]: string } = {
+    newbox: getParam(url, "newbox"),
+    deletebox: getParam(url, "deletebox"),
+    editBox: getParam(url, "editbox"),
+  };
+  const newtemplateBody = getParam(url, "newtemplateBody");
+
+  let boxCount = 0;
+  for (const k of Object.keys(boxes)) {
+    if (boxes[k] === "on") {
+      boxCount++;
+    }
+  }
+
+  if (boxCount > 1) {
     return makeState(
       templateName,
-      "error, choose just new or delete",
+      "error, choose a single option",
       "",
       false,
       secretCode,
@@ -41,12 +55,15 @@ export default async function getNextState(url: URL): Promise<UIState> {
     return makeState("", "please enter a template name", "", false, secretCode);
   }
 
-  if (deletebox === "on" && templateName !== "") {
+  if (boxes.deletebox === "on") {
     await deleteTemplate(templateName);
     return makeState("", "deleted!", "", false, secretCode);
   }
 
-  if (newbox === "on" && templateName !== "") {
+  const t = new tokenizer(newtemplateBody);
+  const tokens = t.tokenize();
+
+  if (boxes.newbox === "on") {
     if (newtemplateBody === "") {
       return makeState(
         templateName,
@@ -66,12 +83,6 @@ export default async function getNextState(url: URL): Promise<UIState> {
       );
     }
 
-    const t = new tokenizer(newtemplateBody);
-    const tokens = t.tokenize();
-    console.debug(tokens);
-    const htmlString = makeHtml(tokens);
-    console.debug(htmlString);
-
     await insertTemplate(
       templateName,
       newtemplateBody,
@@ -79,6 +90,26 @@ export default async function getNextState(url: URL): Promise<UIState> {
       tokens,
     );
     return makeState(templateName, "added!", "", false, secretCode);
+  }
+
+  if (boxes.editBox === "on") {
+    if (await checkExists(templateName) !== 1) {
+      return makeState(
+        templateName,
+        "unable to edit, template not found",
+        "",
+        false,
+        secretCode,
+      );
+    }
+
+    await updateTemplate(
+      templateName,
+      newtemplateBody,
+      getArgCount(newtemplateBody),
+      tokens,
+    );
+    return makeState(templateName, "updated!", "", false, secretCode);
   }
 
   const template = await getTemplate(templateName);
@@ -108,7 +139,6 @@ function getParam(url: URL, name: string): string {
   return url.searchParams.get(name) || "";
 }
 
-//make html string for front end here
 function makeHtml(tokens: token[]) {
   let htmlString = "";
   for (const token of tokens) {
