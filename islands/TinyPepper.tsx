@@ -9,10 +9,6 @@ export default function TinyPepper() {
       src="/tiny-pepper.png"
       style={{
         opacity: hover ? "1" : "0",
-        position: "absolute",
-        top: "25vh",
-        left: "80vw",
-        overflow: "hidden",
       }}
       onMouseOver={() => setHover(true)}
       onMouseLeave={() => setHover(false)}

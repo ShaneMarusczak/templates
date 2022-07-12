@@ -1,4 +1,4 @@
-import { MongoClient } from "https://deno.land/x/atlas_sdk@v0.3.0/mod.ts";
+import { MongoClient } from "https://deno.land/x/atlas_sdk@v1.0.1/mod.ts";
 
 import "https://deno.land/x/dotenv@v3.2.0/load.ts";
 import { token } from "../services/tokenizer.ts";

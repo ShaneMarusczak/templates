@@ -1,0 +1,149 @@
+#mainDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #b0c4de;
+    width: 100vw;
+    height: 100vh
+}
+
+#gitHubLink {
+    position: absolute;
+    top: 7vh;
+    left: 80vw;
+}
+
+#form {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#nameLabel {
+    display: inline-block;
+    width: 125px;
+}
+
+#templateName {
+    border: 1px solid black;
+    margin: 5px;
+    background-color: lightgrey;
+    border-radius: 5px;
+}
+
+#codeLabel {
+    display: inline-block;
+    width: 95px;
+}
+
+#secretCode {
+    border: 1px solid black;
+    margin: 5px;
+    background-color: lightgrey;
+    border-radius: 5px;
+    width: 50px;
+    text-align: center;
+}
+
+#templateArgString {
+    display: inline-block;
+    width: 125px;
+    margin-top: 20px;
+}
+
+#templateArgStringInput {
+    border: 1px solid black;
+    margin: 5px;
+    background-color: lightgrey;
+    border-radius: 5px;
+    width: 275px;
+    margin-bottom: 20px;
+}
+
+#newTemplateBodyInput {
+    border: 1px solid black;
+    width: 300px;
+    height: 150px;
+    background-color: lightgrey;
+    border-radius: 5px;
+}
+
+h1 {
+    font-size: xx-large;
+    margin-top: 5px;
+}
+
+input[type="checkbox"] {
+    margin: 5px;
+}
+
+pre {
+    width: 40em;
+    white-space: pre-wrap;
+}
+
+#gameLink {
+    position: absolute;
+    top: 7vh;
+    left: 13vw;
+    cursor: pointer;
+}
+
+#modal-box {
+    z-index: 1;
+    position: fixed;
+    padding: 0;
+    margin: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+#inner-modal-box {
+    position: relative;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: inset 0 0 0 4px black;
+    margin-left: 40vw;
+    margin-top: 10vh;
+    background-color: azure;
+    width: 350px;
+    height: 15vh;
+}
+
+#modal-message {
+    vertical-align: middle;
+    font-size: xx-large;
+    line-height: 15vh;
+}
+
+#highShell {
+    border: 1px solid black;
+    padding: 5px;
+    width: 40em;
+    min-height: 5em;
+    overflow: auto;
+    white-space: pre;
+    background-color: lightgrey;
+    border-radius: 5px;
+}
+
+button[type="submit"] {
+    width: 75px;
+    height: 45px;
+    border: 1px solid black;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+img {
+    position: absolute;
+    top: 25vh;
+    left: 80vw;
+    overflow: hidden;
+}

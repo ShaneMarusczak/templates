@@ -4,7 +4,7 @@ import {
   getTemplate,
   insertTemplate,
   updateTemplate,
-} from "../utils/db.ts";
+} from "../services/db.ts";
 import { getArgCount, stringFormat } from "../utils/string_utils.ts";
 import { token, token_type, tokenizer } from "./tokenizer.ts";
 
@@ -25,7 +25,7 @@ export default async function getNextState(url: URL): Promise<UIState> {
   }
 
   const templateName = getParam(url, "templateName");
-  const templateArgString = getParam(url, "templateArgString");
+  const templateArgString = getParam(url, "templateArgStringInput");
 
   const boxes: { [key: string]: string } = {
     newbox: getParam(url, "newbox"),
@@ -141,6 +141,7 @@ function getParam(url: URL, name: string): string {
 
 function makeHtml(tokens: token[]) {
   let htmlString = "";
+  console.debug(tokens);
   for (const token of tokens) {
     switch (token.type) {
       case token_type.text: {

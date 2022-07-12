@@ -5,7 +5,6 @@ import Output from "../islands/Output.tsx";
 import RunButton from "../islands/RunButton.tsx";
 import getNextState, { UIState } from "../services/state_machine.ts";
 import GameLink from "../islands/GameLink.tsx";
-import { styles } from "../utils/styles.ts";
 import TinyPepper from "../islands/TinyPepper.tsx";
 
 export const handler: Handlers<UIState> = {
@@ -18,20 +17,20 @@ export default function Page({ data }: PageProps<UIState>) {
   const { query, value, rawTemplate, copyable, currentCode } = data;
 
   return (
-    <div style={styles.mainDiv}>
+    <div id="mainDiv">
       <GameLink />
       <a
         href="https://github.com/ShaneMarusczak/templates"
         target="_blank"
-        style={styles.gitHubLink}
+        id="gitHubLink"
       >
         github
       </a>
-      <h1 style={{ fontSize: "xx-large", marginTop: "5px" }}>
+      <h1>
         template builder
       </h1>
-      <form style={styles.form}>
-        <label for="templateName" style={styles.nameLabel}>
+      <form id="form">
+        <label for="templateName" id="nameLabel">
           template name:
         </label>
         <input
@@ -39,7 +38,6 @@ export default function Page({ data }: PageProps<UIState>) {
           name="templateName"
           id="templateName"
           value={query}
-          style={styles.nameInput}
         />
         <div>
           <label for="newbox">new?</label>
@@ -47,7 +45,6 @@ export default function Page({ data }: PageProps<UIState>) {
             type="checkbox"
             name="newbox"
             id="newbox"
-            style={{ margin: "5px" }}
           >
           </input>
           <label for="deletebox">delete?</label>
@@ -55,7 +52,6 @@ export default function Page({ data }: PageProps<UIState>) {
             type="checkbox"
             name="deletebox"
             id="deletebox"
-            style={{ margin: "5px" }}
           />
 
           <label for="editbox">edit?</label>
@@ -63,32 +59,29 @@ export default function Page({ data }: PageProps<UIState>) {
             type="checkbox"
             name="editbox"
             id="editbox"
-            style={{ margin: "5px" }}
           />
         </div>
 
         <label
-          for="templateArgString"
-          style={styles.templateArgString}
+          for="templateArgStringInput"
+          id="templateArgString"
         >
           template args:
         </label>
         <input
           type="text"
-          name="templateArgString"
-          id="templateArgString"
-          style={styles.templateArgStringInput}
+          name="templateArgStringInput"
+          id="templateArgStringInput"
         />
 
         <label for="newtemplateBody">new template body:</label>
         <textarea
           name="newtemplateBody"
-          id="newtemplateBody"
-          style={styles.newTemplateBodyInput}
+          id="newTemplateBodyInput"
         />
 
         <RunButton />
-        <label for="secretCode" style={styles.codeLabel}>
+        <label for="secretCode" id="codeLabel">
           secret code:
         </label>
         <input
@@ -96,12 +89,11 @@ export default function Page({ data }: PageProps<UIState>) {
           name="secretCode"
           id="secretCode"
           value={currentCode}
-          style={styles.codeInput}
         />
       </form>
       <Output value={value} copyable={copyable} />
-      <p title="6:29 PM">last updated: july 11, 2022</p>
-      <pre style={{ width: "40em", whiteSpace: "pre-wrap" }}>
+      <p title="9:07 PM">last updated: july 11, 2022</p>
+      <pre>
         {rawTemplate ? "Raw Template:\n" + rawTemplate : ""}
       </pre>
       <TinyPepper />
