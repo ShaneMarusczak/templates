@@ -1,11 +1,6 @@
-import {
-  checkExists,
-  deleteTemplate,
-  getTemplate,
-  insertTemplate,
-  updateTemplate,
-} from "../services/db.ts";
+import { checkExists, del, get, insert, update } from "../services/db.ts";
 import { getArgCount, stringFormat } from "../utils/string_utils.ts";
+import { parseParams } from "./param_parser.ts";
 import { token, token_type, tokenizer } from "./tokenizer.ts";
 
 export interface UIState {
@@ -14,111 +9,112 @@ export interface UIState {
   rawTemplate: string;
   copyable: boolean;
   currentCode: string;
+  codeCorrect: boolean;
 }
 
-//TODO: break this into smaller functions
 export default async function getNextState(url: URL): Promise<UIState> {
-  const secretCode = getParam(url, "secretCode");
+  const p = parseParams(url);
 
-  if (secretCode !== Deno.env.get("SECRET_CODE")) {
-    return makeState("", "forbidden", "", false, "");
+  if (p.secretCode !== Deno.env.get("SECRET_CODE")) {
+    return makeState("", "forbidden", "", false, "", false);
   }
 
-  const templateName = getParam(url, "templateName");
-  const templateArgString = getParam(url, "templateArgStringInput");
-
-  const boxes: { [key: string]: string } = {
-    newbox: getParam(url, "newbox"),
-    deletebox: getParam(url, "deletebox"),
-    editBox: getParam(url, "editbox"),
-  };
-  const newtemplateBody = getParam(url, "newtemplateBody");
-
-  let boxCount = 0;
-  for (const k of Object.keys(boxes)) {
-    if (boxes[k] === "on") {
-      boxCount++;
-    }
-  }
-
-  if (boxCount > 1) {
+  if (p.boxState.invalid()) {
     return makeState(
-      templateName,
+      p.templateName,
       "error, choose a single option",
       "",
       false,
-      secretCode,
+      p.secretCode,
+      true,
     );
   }
 
-  if (templateName === "") {
-    return makeState("", "please enter a template name", "", false, secretCode);
+  if (p.templateName === "") {
+    return makeState(
+      "",
+      "please enter a template name",
+      "",
+      false,
+      p.secretCode,
+      true,
+    );
   }
 
-  if (boxes.deletebox === "on") {
-    await deleteTemplate(templateName);
-    return makeState("", "deleted!", "", false, secretCode);
+  if (p.boxState.deleteOn()) {
+    await del(p.templateName);
+    return makeState("", "deleted!", "", false, p.secretCode, true);
   }
 
-  const t = new tokenizer(newtemplateBody);
+  const t = new tokenizer(p.newTemplateBody);
   const tokens = t.tokenize();
 
-  if (boxes.newbox === "on") {
-    if (newtemplateBody === "") {
+  if (p.boxState.newOn()) {
+    if (p.newTemplateBody === "") {
       return makeState(
-        templateName,
+        p.templateName,
         "no template body provided",
         "",
         false,
-        secretCode,
+        p.secretCode,
+        true,
       );
     }
-    if (await checkExists(templateName) === 1) {
+    if (await checkExists(p.templateName) === 1) {
       return makeState(
-        templateName,
+        p.templateName,
         "template already exists",
         "",
         false,
-        secretCode,
+        p.secretCode,
+        true,
       );
     }
 
-    await insertTemplate(
-      templateName,
-      newtemplateBody,
-      getArgCount(newtemplateBody),
+    await insert(
+      p.templateName,
+      p.newTemplateBody,
+      getArgCount(p.newTemplateBody),
       tokens,
     );
-    return makeState(templateName, "added!", "", false, secretCode);
+    return makeState(p.templateName, "added!", "", false, p.secretCode, true);
   }
 
-  if (boxes.editBox === "on") {
-    if (await checkExists(templateName) !== 1) {
+  if (p.boxState.editOn()) {
+    if (await checkExists(p.templateName) !== 1) {
       return makeState(
-        templateName,
+        p.templateName,
         "unable to edit, template not found",
         "",
         false,
-        secretCode,
+        p.secretCode,
+        true,
       );
     }
 
-    await updateTemplate(
-      templateName,
-      newtemplateBody,
-      getArgCount(newtemplateBody),
+    await update(
+      p.templateName,
+      p.newTemplateBody,
+      getArgCount(p.newTemplateBody),
       tokens,
     );
-    return makeState(templateName, "updated!", "", false, secretCode);
+    return makeState(p.templateName, "updated!", "", false, p.secretCode, true);
   }
 
-  const template = await getTemplate(templateName);
+  const template = await get(p.templateName);
 
   if (typeof template === "undefined" || template === null) {
-    return makeState(templateName, "not found!", "", false, secretCode);
+    return makeState(
+      p.templateName,
+      "not found!",
+      "",
+      false,
+      p.secretCode,
+      true,
+    );
   }
 
-  const templateArgs: string[] = templateArgString.split(",").filter(Boolean)
+  const templateArgs: string[] = p.templateArgString.split(",").filter(Boolean)
     .map((a) => a.trim());
 
   if (template.argCount != templateArgs.length) {
@@ -127,16 +123,19 @@ export default async function getNextState(url: URL): Promise<UIState> {
       String(template.argCount),
       String(templateArgs.length),
     );
-    return makeState(templateName, error, template.value, false, secretCode);
+    return makeState(
+      p.templateName,
+      error,
+      template.value,
+      false,
+      p.secretCode,
+      true,
+    );
   }
 
   const value = stringFormat(makeHtml(template.tokens), ...templateArgs);
 
-  return makeState(templateName, value, "", true, secretCode);
-}
-
-function getParam(url: URL, name: string): string {
-  return url.searchParams.get(name) || "";
+  return makeState(p.templateName, value, "", true, p.secretCode, true);
 }
 
 function makeHtml(tokens: token[]) {
@@ -168,6 +167,7 @@ function makeState(
   rawTemplate: string,
   copyable: boolean,
   currentCode: string,
+  codeCorrect: boolean,
 ): UIState {
-  return { query, value, rawTemplate, copyable, currentCode };
+  return { query, value, rawTemplate, copyable, currentCode, codeCorrect };
 }

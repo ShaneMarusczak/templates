@@ -18,7 +18,7 @@ interface TemplateSchema {
   tokens: token[];
 }
 
-export async function getTemplate(name: string) {
+export async function get(name: string) {
   const db = client.database("Template");
 
   const templates = db.collection<TemplateSchema>("Template");
@@ -34,7 +34,7 @@ export async function checkExists(name: string) {
   return await templates.countDocuments({ name }, { limit: 1 });
 }
 
-export async function insertTemplate(
+export async function insert(
   name: string,
   value: string,
   argCount: number,
@@ -47,7 +47,7 @@ export async function insertTemplate(
   return await templates.insertOne({ name, value, argCount, tokens });
 }
 
-export async function deleteTemplate(name: string) {
+export async function del(name: string) {
   const db = client.database("Template");
 
   const templates = db.collection<TemplateSchema>("Template");
@@ -55,7 +55,7 @@ export async function deleteTemplate(name: string) {
   return await templates.deleteOne({ name });
 }
 
-export async function updateTemplate(
+export async function update(
   name: string,
   value: string,
   argCount: number,
