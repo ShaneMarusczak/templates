@@ -1,5 +1,6 @@
 html {
     background-color: #b0c4de;
+    font-family: "Roboto Mono", monospace;
 }
 
 body {
@@ -33,7 +34,7 @@ body {
 
 #nameLabel {
     display: inline-block;
-    width: 125px;
+    width: 135px;
 }
 
 #templateName {
@@ -45,7 +46,7 @@ body {
 
 #codeLabel {
     display: inline-block;
-    width: 95px;
+    width: 135px;
 }
 
 #secretCode {
@@ -59,7 +60,7 @@ body {
 
 #templateArgString {
     display: inline-block;
-    width: 125px;
+    width: 135px;
     margin-top: 20px;
 }
 

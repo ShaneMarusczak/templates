@@ -6,6 +6,7 @@ import RunButton from "../islands/RunButton.tsx";
 import getNextState, { UIState } from "../services/state_machine.ts";
 import GameLink from "../islands/GameLink.tsx";
 import TinyPepper from "../islands/TinyPepper.tsx";
+import OptionSelect from "../islands/OptionSelect.tsx";
 
 export const handler: Handlers<UIState> = {
   async GET(req, ctx) {
@@ -40,28 +41,7 @@ export default function Page({ data }: PageProps<UIState>) {
           id="templateName"
           value={query}
         />
-        <div>
-          <label for="newbox">new?</label>
-          <input
-            type="checkbox"
-            name="newbox"
-            id="newbox"
-          >
-          </input>
-          <label for="deletebox">delete?</label>
-          <input
-            type="checkbox"
-            name="deletebox"
-            id="deletebox"
-          />
-
-          <label for="editbox">edit?</label>
-          <input
-            type="checkbox"
-            name="editbox"
-            id="editbox"
-          />
-        </div>
+        <OptionSelect />
 
         <label
           for="templateArgStringInput"
@@ -98,7 +78,7 @@ export default function Page({ data }: PageProps<UIState>) {
         <RunButton />
       </form>
       <Output value={value} copyable={copyable} />
-      <p title="3:57 PM">last updated: july 13, 2022</p>
+      <p title="7:33 PM">last updated: july 18, 2022</p>
       <pre>
         {rawTemplate ? "Raw Template:\n" + rawTemplate : ""}
       </pre>

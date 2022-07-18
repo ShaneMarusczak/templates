@@ -40,7 +40,7 @@ export default function Output(props: { value: string; copyable: boolean }) {
       }
       navigator.clipboard.writeText(text);
 
-      modal("Copied to clipboard!", 1300);
+      modal("copied!", 1300);
     }
   }
 

@@ -5,9 +5,10 @@
 import * as $0 from "./routes/_app.tsx";
 import * as $1 from "./routes/template.tsx";
 import * as $$0 from "./islands/GameLink.tsx";
-import * as $$1 from "./islands/Output.tsx";
-import * as $$2 from "./islands/RunButton.tsx";
-import * as $$3 from "./islands/TinyPepper.tsx";
+import * as $$1 from "./islands/OptionSelect.tsx";
+import * as $$2 from "./islands/Output.tsx";
+import * as $$3 from "./islands/RunButton.tsx";
+import * as $$4 from "./islands/TinyPepper.tsx";
 
 const manifest = {
   routes: {
@@ -16,9 +17,10 @@ const manifest = {
   },
   islands: {
     "./islands/GameLink.tsx": $$0,
-    "./islands/Output.tsx": $$1,
-    "./islands/RunButton.tsx": $$2,
-    "./islands/TinyPepper.tsx": $$3,
+    "./islands/OptionSelect.tsx": $$1,
+    "./islands/Output.tsx": $$2,
+    "./islands/RunButton.tsx": $$3,
+    "./islands/TinyPepper.tsx": $$4,
   },
   baseUrl: import.meta.url,
 };
