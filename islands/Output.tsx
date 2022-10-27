@@ -1,6 +1,3 @@
-/** @jsx h */
-import { h } from "preact";
-
 export default function Output(props: { value: string; copyable: boolean }) {
   const { value, copyable } = props;
 

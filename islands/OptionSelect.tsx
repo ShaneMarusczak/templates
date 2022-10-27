@@ -1,6 +1,3 @@
-/** @jsx h */
-import { h } from "preact";
-
 export default function OptionSelect() {
   function onInput(e: Event) {
     const inputs = document.querySelectorAll("input[type='checkbox']");

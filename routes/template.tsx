@@ -1,5 +1,3 @@
-/** @jsx h */
-import { h } from "preact";
 import { Handlers, PageProps } from "$fresh/server.ts";
 import Output from "../islands/Output.tsx";
 import RunButton from "../islands/RunButton.tsx";
@@ -78,7 +76,7 @@ export default function Page({ data }: PageProps<UIState>) {
         <RunButton />
       </form>
       <Output value={value} copyable={copyable} />
-      <p title="7:33 PM">last updated: july 18, 2022</p>
+      <p title="7:33 PM">last updated: october 27, 2022</p>
       <pre>
         {rawTemplate ? "Raw Template:\n" + rawTemplate : ""}
       </pre>
