@@ -82,7 +82,6 @@ export class tokenizer {
       url: "",
     });
 
-    // TODO : add these to d
     return this.tokens;
   }
 }

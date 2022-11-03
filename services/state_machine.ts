@@ -140,7 +140,6 @@ export default async function getNextState(url: URL): Promise<UIState> {
 
 function makeHtml(tokens: token[]) {
   let htmlString = "";
-  console.debug(tokens);
   for (const token of tokens) {
     switch (token.type) {
       case token_type.text: {

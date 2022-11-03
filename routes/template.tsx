@@ -52,12 +52,20 @@ export default function Page({ data }: PageProps<UIState>) {
           name="templateArgStringInput"
           id="templateArgStringInput"
         />
-
-        <label for="newtemplateBody">new template body:</label>
-        <textarea
-          name="newtemplateBody"
-          id="newTemplateBodyInput"
-        />
+        <div
+          id="newTemplateBodyArea"
+          style={{
+            display: "none",
+          }}
+        >
+          <label id="newtemplateBodyLabel" for="newtemplateBody">
+            new template body:
+          </label>
+          <textarea
+            name="newtemplateBody"
+            id="newTemplateBodyInput"
+          />
+        </div>
         <div
           style={{
             display: codeCorrect ? "none" : "block",
@@ -76,7 +84,7 @@ export default function Page({ data }: PageProps<UIState>) {
         <RunButton />
       </form>
       <Output value={value} copyable={copyable} />
-      <p title="7:33 PM">last updated: october 27, 2022</p>
+      <p title="7:19 PM">last updated: november 3, 2022</p>
       <pre>
         {rawTemplate ? "Raw Template:\n" + rawTemplate : ""}
       </pre>

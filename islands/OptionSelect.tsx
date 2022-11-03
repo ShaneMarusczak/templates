@@ -6,6 +6,21 @@ export default function OptionSelect() {
         (elem as HTMLInputElement).checked = false;
       }
     });
+    if (
+      (e.target as HTMLInputElement).id === "newbox" &&
+      (e.target as HTMLInputElement).checked
+    ) {
+      const el = document.getElementById("newTemplateBodyArea");
+      if (el !== null) {
+        el.style.display = "flex";
+        el.style.flexDirection = "column";
+      }
+    } else {
+      const el = document.getElementById("newTemplateBodyArea");
+      if (el !== null) {
+        el.style.display = "none";
+      }
+    }
   }
 
   return (
